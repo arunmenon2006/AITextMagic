@@ -1,0 +1,67 @@
+{{ define "main" }}
+<section class="page-header">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+        <p class="page-description">{{ .Params.description | default "Discover insights about AI-powered content creation, writing tips, and industry trends." }}</p>
+    </div>
+</section>
+
+<section class="blog-content">
+    <div class="container">
+        {{ if .Pages }}
+        <div class="blog-posts">
+            {{ range .Pages.ByDate.Reverse }}
+            <article class="blog-post-card">
+                <div class="post-image">
+                    {{ if .Params.image }}
+                    <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}" loading="lazy">
+                    {{ else }}
+                    <div class="placeholder-image">
+                        <span class="blog-icon">📝</span>
+                    </div>
+                    {{ end }}
+                </div>
+                
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}">
+                            {{ .Date.Format "January 2, 2006" }}
+                        </time>
+                        {{ if .Params.author }}
+                        <span class="author">by {{ .Params.author }}</span>
+                        {{ end }}
+                        {{ if .Params.readingTime }}
+                        <span class="reading-time">{{ .Params.readingTime }} min read</span>
+                        {{ end }}
+                    </div>
+                    
+                    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+                    
+                    {{ if .Params.description }}
+                    <p class="post-excerpt">{{ .Params.description }}</p>
+                    {{ else }}
+                    <p class="post-excerpt">{{ .Summary | truncate 150 }}...</p>
+                    {{ end }}
+                    
+                    {{ if .Params.tags }}
+                    <div class="post-tags">
+                        {{ range .Params.tags }}
+                        <span class="tag">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                    
+                    <a href="{{ .Permalink }}" class="read-more">Read Full Article →</a>
+                </div>
+            </article>
+            {{ end }}
+        </div>
+        {{ else }}
+        <div class="no-posts">
+            <h3>No blog posts yet</h3>
+            <p>Check back soon for insights about AI-powered content creation!</p>
+        </div>
+        {{ end }}
+    </div>
+</section>
+{{ end }}
