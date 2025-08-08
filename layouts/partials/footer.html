@@ -1,0 +1,46 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AITextMagic</h3>
+                <p>Transform your content with AI-powered text generation and editing tools.</p>
+                <div class="social-links">
+                    {{ if .Site.Params.facebook }}
+                    <a href="{{ .Site.Params.facebook }}" target="_blank" rel="noopener">Facebook</a>
+                    {{ end }}
+                    {{ if .Site.Params.twitter }}
+                    <a href="{{ .Site.Params.twitter }}" target="_blank" rel="noopener">Twitter</a>
+                    {{ end }}
+                    {{ if .Site.Params.linkedin }}
+                    <a href="{{ .Site.Params.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+                    {{ end }}
+                    {{ if .Site.Params.github }}
+                    <a href="{{ .Site.Params.github }}" target="_blank" rel="noopener">GitHub</a>
+                    {{ end }}
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    {{ range .Site.Menus.main }}
+                    <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <div class="contact-info">
+                    <p><strong>Email:</strong> {{ .Site.Params.email }}</p>
+                    <p><strong>Phone:</strong> {{ .Site.Params.phone }}</p>
+                    <p><strong>Address:</strong> {{ .Site.Params.address }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; {{ now.Format "2006" }} {{ .Site.Title }}. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

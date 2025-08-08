@@ -1,0 +1,30 @@
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <div class="navbar-brand">
+    <a href="{{ "/" | relURL }}" class="logo">
+        <div class="logo-text">AITextMagic</div>
+        <div class="logo-tagline">AI-Powered Text Generation</div>
+    </a>
+</div>
+            
+            <div class="navbar-menu" id="navbar-menu">
+                <ul class="navbar-nav">
+                    {{ range .Site.Menus.main }}
+                    <li class="nav-item">
+                        <a href="{{ .URL | relURL }}" class="nav-link {{ if $.IsMenuCurrent "main" . }}active{{ end }}">
+                            {{ .Name }}
+                        </a>
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
+            
+            <div class="navbar-toggle" id="navbar-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </div>
+</header>

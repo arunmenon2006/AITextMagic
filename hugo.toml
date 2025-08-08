@@ -1,0 +1,40 @@
+baseURL = "https://aitextmagic.com"
+languageCode = "en-us"
+title = "AITextMagic - AI-Powered Text Generation"
+[pagination]
+  pagerSize = 6
+
+[params]
+  author = "AITextMagic Team"
+  description = "Transform your content with AI-powered text generation and editing tools"
+  keywords = "AI, text generation, content creation, artificial intelligence"
+  email = "hello@aitextmagic.com"
+  phone = "+1234567890"
+  address = "Your Address"
+  
+  # Social links
+  facebook = "https://facebook.com/aitextmagic"
+  twitter = "https://twitter.com/aitextmagic"
+  linkedin = "https://linkedin.com/company/aitextmagic"
+  github = "https://github.com/aitextmagic"
+
+# Main menu
+[[menus.main]]
+  name = "Home"
+  url = "/"
+  weight = 10
+
+[[menus.main]]
+  name = "About"
+  url = "/about/"
+  weight = 20
+
+[[menus.main]]
+  name = "Blog"
+  url = "/blog/"
+  weight = 30
+
+[[menus.main]]
+  name = "Contact"
+  url = "/contact/"
+  weight = 40
