@@ -6,17 +6,17 @@ title = "AITextMagic - AI-Powered Text Generation"
 
 [params]
   author = "AITextMagic Team"
-  description = "Transform your content with AI-powered text generation and editing tools"
-  keywords = "AI, text generation, content creation, artificial intelligence"
-  email = "hello@aitextmagic.com"
-  phone = "+1234567890"
-  address = "Your Address"
+  description = "Free AI-powered tools for summarizing text, performing text sentiment analysis, and converting text to speech."
+  keywords = "summarize text generator, text sentiment analysis, convert text to speech free, AI text tools, free text summarizer, speech synthesis"
+  email = ""
+  phone = ""
+  address = ""
   
   # Social links
-  facebook = "https://facebook.com/aitextmagic"
-  twitter = "https://twitter.com/aitextmagic"
-  linkedin = "https://linkedin.com/company/aitextmagic"
-  github = "https://github.com/aitextmagic"
+  facebook = ""
+  twitter = ""
+  linkedin = ""
+  github = ""
 
 # Main menu
 [[menus.main]]
@@ -35,6 +35,6 @@ title = "AITextMagic - AI-Powered Text Generation"
   weight = 30
 
 [[menus.main]]
-  name = "Contact"
-  url = "/contact/"
+  name = "Privacy Policy"
+  url = "/privacy-policy/"
   weight = 40

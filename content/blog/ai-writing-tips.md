@@ -5,7 +5,7 @@ description: "Master the art of AI-assisted writing with these proven tips and t
 author: "Sarah Johnson"
 tags: ["Writing Tips", "AI", "Content Strategy", "Best Practices"]
 readingTime: 7
-image: "/images/blog/writing-tips.jpg"
+image: "/images/blog/writing-tips.png"
 ---
 
 # Master AI-Powered Content Writing

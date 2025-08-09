@@ -5,7 +5,7 @@ description: "Discover how AITextMagic is transforming the way we create, edit, 
 author: "AITextMagic Team"
 tags: ["AI", "Content Creation", "Writing", "Technology"]
 readingTime: 5
-image: "/images/blog/welcome-post.jpg"
+image: "/images/blog/welcome-post.png"
 ---
 
 # Welcome to the Future of Content Creation

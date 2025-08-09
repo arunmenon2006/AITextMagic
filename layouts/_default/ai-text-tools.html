@@ -6,39 +6,100 @@
 {{ end }}
 
 {{ define "main" }}
-<div class="container mx-auto max-w-3xl py-10">
-  <h1 class="text-4xl font-bold mb-8 text-center">AI Text Tools</h1>
+<div class="container mx-auto max-w-4xl py-10 px-4">
 
-  <!-- Tabs -->
-  <div class="flex justify-center space-x-4 mb-6">
-    <button id="tabSummarizeBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Summarize</button>
-    <button id="tabSentimentBtn" class="px-4 py-2 bg-gray-300 rounded">Sentiment</button>
-    <button id="tabTTSBtn" class="px-4 py-2 bg-gray-300 rounded">Text-to-Speech</button>
+  <h1 class="text-4xl font-extrabold mb-6 text-center text-gray-900">
+    AI Text Tools: Summarization, Sentiment Analysis &amp; Text to Speech
+  </h1>
+
+  <p class="mb-8 max-w-3xl mx-auto text-gray-700 text-lg leading-relaxed text-center">
+    Unlock the power of advanced AI text tools designed to simplify and enhance your content creation and analysis. Our platform offers three essential AI-powered features:
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto text-gray-800">
+    <!-- Summarize Text Generator -->
+    <div class="bg-blue-50 border-l-4 border-blue-600 p-5 rounded shadow">
+      <h2 class="text-xl font-semibold mb-3 text-blue-800">1. Summarize Text Generator</h2>
+      <p class="mb-3">
+        Save time by instantly generating clear, concise summaries of any lengthy article, blog post, or document. Our AI summarization tool uses state-of-the-art models to extract key points, making information easier to understand and share. Perfect for students, professionals, marketers, and anyone who needs quick insights.
+      </p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Generate accurate and readable summaries</li>
+        <li>Support for various text lengths and formats</li>
+        <li>Ideal for research, content curation, and briefing</li>
+      </ul>
+    </div>
+
+    <!-- Text Sentiment Analysis -->
+    <div class="bg-green-50 border-l-4 border-green-600 p-5 rounded shadow">
+      <h2 class="text-xl font-semibold mb-3 text-green-800">2. Text Sentiment Analysis</h2>
+      <p class="mb-3">
+        Understand the emotions behind your text with our sentiment analysis tool. Whether analyzing customer reviews, social media posts, or survey feedback, this AI-driven feature detects positive, negative, or neutral sentiment to help you make data-driven decisions.
+      </p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Quickly analyze large volumes of text</li>
+        <li>Gain insights into customer satisfaction and public opinion</li>
+        <li>Enhance your marketing and customer engagement strategies</li>
+      </ul>
+    </div>
+
+    <!-- Convert Text to Speech Free -->
+    <div class="bg-purple-50 border-l-4 border-purple-600 p-5 rounded shadow">
+      <h2 class="text-xl font-semibold mb-3 text-purple-800">3. Convert Text to Speech Free</h2>
+      <p class="mb-3">
+        Bring your written content to life with our free text-to-speech converter. Transform any text into natural-sounding audio, perfect for podcasts, audiobooks, accessibility tools, or on-the-go listening.
+      </p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Multiple voice selections to suit your needs</li>
+        <li>Fast and easy online conversion</li>
+        <li>Compatible with all devices</li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Summarization -->
+  <h2 class="text-2xl font-semibold mb-4 text-center text-gray-900">Why Use Our AI Text Tools?</h2>
+  <p class="max-w-2xl mx-auto mb-8 text-center text-gray-700 leading-relaxed">
+    Easy to use: No technical skills required — just enter your text and get instant results.<br/>
+    Free and accessible: Use powerful AI features directly in your browser without downloads.<br/>
+    Secure and private: Your data stays safe — all processing happens locally or through trusted APIs.
+  </p>
+
+  <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900">Start Enhancing Your Text Today!</h2>
+  <p class="max-w-3xl mx-auto mb-12 text-center text-gray-700 leading-relaxed">
+    Experience the convenience and accuracy of AI-powered summarization, sentiment analysis, and text-to-speech tools. Improve your productivity and content quality with just a few clicks.
+  </p>
+
+  <!-- Tabs -->
+  <div class="flex justify-center space-x-4 mb-10">
+    <button id="tabSummarizeBtn" class="px-5 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">Summarize</button>
+    <button id="tabSentimentBtn" class="px-5 py-3 bg-gray-300 text-gray-700 rounded-md shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 transition">Sentiment</button>
+    <button id="tabTTSBtn" class="px-5 py-3 bg-gray-300 text-gray-700 rounded-md shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 transition">Text-to-Speech</button>
+  </div>
+
+  <!-- Summarization Section -->
   <section id="tabSummarize" class="tab-content">
-    <textarea id="summarize-input" rows="6" class="w-full p-3 border rounded mb-3" placeholder="Enter text to summarize..."></textarea>
-    <button id="summarize-btn" class="px-4 py-2 bg-green-600 text-white rounded">Summarize</button>
-    <div id="loading-summarize" class="mt-2 text-yellow-700 font-semibold"></div>
-    <pre id="summarize-result" class="mt-4 p-4 bg-gray-100 rounded whitespace-pre-wrap"></pre>
+    <textarea id="summarize-input" rows="6" class="w-full p-4 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Enter text to summarize..."></textarea>
+    <button id="summarize-btn" class="px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">Summarize</button>
+    <div id="loading-summarize" class="mt-3 text-yellow-700 font-semibold min-h-[1.5rem]"></div>
+    <pre id="summarize-result" class="mt-6 p-5 bg-gray-100 rounded-md whitespace-pre-wrap text-gray-900"></pre>
   </section>
 
-  <!-- Sentiment -->
+  <!-- Sentiment Analysis Section -->
   <section id="tabSentiment" class="tab-content hidden">
-    <textarea id="sentiment-input" rows="6" class="w-full p-3 border rounded mb-3" placeholder="Enter text for sentiment analysis..."></textarea>
-    <button id="sentiment-btn" class="px-4 py-2 bg-green-600 text-white rounded">Analyze Sentiment</button>
-    <div id="loading-sentiment" class="mt-2 text-yellow-700 font-semibold"></div>
-    <pre id="sentiment-result" class="mt-4 p-4 bg-gray-100 rounded whitespace-pre-wrap"></pre>
+    <textarea id="sentiment-input" rows="6" class="w-full p-4 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 mb-4" placeholder="Enter text for sentiment analysis..."></textarea>
+    <button id="sentiment-btn" class="px-6 py-3 bg-green-600 text-white rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition">Analyze Sentiment</button>
+    <div id="loading-sentiment" class="mt-3 text-yellow-700 font-semibold min-h-[1.5rem]"></div>
+    <pre id="sentiment-result" class="mt-6 p-5 bg-gray-100 rounded-md whitespace-pre-wrap text-gray-900"></pre>
   </section>
 
-  <!-- Text-to-Speech -->
+  <!-- Text-to-Speech Section -->
   <section id="tabTTS" class="tab-content hidden">
-    <textarea id="tts-input" rows="6" class="w-full p-3 border rounded mb-3" placeholder="Enter text to read aloud..."></textarea>
-    <button id="tts-btn" class="px-4 py-2 bg-green-600 text-white rounded">Speak</button>
-    <div id="loading-tts" class="mt-2 text-yellow-700 font-semibold"></div>
+    <textarea id="tts-input" rows="6" class="w-full p-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4" placeholder="Enter text to read aloud..."></textarea>
+    <button id="tts-btn" class="px-6 py-3 bg-purple-600 text-white rounded-md shadow hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 transition">Speak</button>
+    <div id="loading-tts" class="mt-3 text-yellow-700 font-semibold min-h-[1.5rem]"></div>
     <audio id="tts-audio" hidden></audio>
   </section>
+
 </div>
 
 <script type="module">
@@ -58,7 +119,7 @@ const audioElem = document.getElementById("tts-audio");
 // Disable buttons initially
 [summarizeBtn, sentimentBtn, ttsBtn].forEach(btn => btn.disabled = true);
 
-// Simple tab switching logic
+// Tab switching logic
 const tabs = {
   tabSummarizeBtn: "tabSummarize",
   tabSentimentBtn: "tabSentiment",
@@ -69,15 +130,15 @@ Object.keys(tabs).forEach(btnId => {
     Object.values(tabs).forEach(tabId => document.getElementById(tabId).classList.add("hidden"));
     document.getElementById(tabs[btnId]).classList.remove("hidden");
 
-    // Button color toggle
+    // Button active styling
     Object.keys(tabs).forEach(id => {
       const btn = document.getElementById(id);
       if (id === btnId) {
-        btn.classList.remove("bg-gray-300");
+        btn.classList.remove("bg-gray-300", "text-gray-700");
         btn.classList.add("bg-blue-600", "text-white");
       } else {
         btn.classList.remove("bg-blue-600", "text-white");
-        btn.classList.add("bg-gray-300");
+        btn.classList.add("bg-gray-300", "text-gray-700");
       }
     });
   });
@@ -108,7 +169,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Helper to show processing state on buttons
 function showProcessing(btn, isProcessing) {
   if (isProcessing) {
     btn.dataset.origText = btn.textContent;
@@ -120,7 +180,7 @@ function showProcessing(btn, isProcessing) {
   }
 }
 
-// Summarize
+// Summarization
 summarizeBtn.addEventListener("click", async () => {
   const input = document.getElementById("summarize-input").value.trim();
   if (!input) return alert("Enter text to summarize");
