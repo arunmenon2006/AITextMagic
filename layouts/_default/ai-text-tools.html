@@ -1,84 +1,179 @@
 {{ define "title" }}AI Text Tools - {{ .Site.Title }}{{ end }}
-{{ define "description" }}Free AI-powered summarization, paraphrasing, and sentiment analysis tools running locally in your browser.{{ end }}
+{{ define "description" }}Free AI-powered summarization, sentiment analysis, and text-to-speech tools running locally in your browser.{{ end }}
 
 {{ define "head" }}
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.13.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/qna"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 {{ end }}
 
 {{ define "main" }}
-<div class="container mx-auto py-10">
-    <h1 class="text-3xl font-bold text-center mb-8">AI Text Tools</h1>
+<div class="container mx-auto max-w-3xl py-10">
+  <h1 class="text-4xl font-bold mb-8 text-center">AI Text Tools</h1>
 
-    <!-- Tab Navigation -->
-    <div class="flex justify-center space-x-4 mb-6">
-        <button class="tab-btn px-4 py-2 bg-blue-500 text-white rounded" data-tab="summarizer">Summarizer</button>
-        <button class="tab-btn px-4 py-2 bg-gray-200 rounded" data-tab="paraphraser">Paraphraser</button>
-        <button class="tab-btn px-4 py-2 bg-gray-200 rounded" data-tab="sentiment">Sentiment</button>
-    </div>
+  <!-- Tabs -->
+  <div class="flex justify-center space-x-4 mb-6">
+    <button id="tabSummarizeBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Summarize</button>
+    <button id="tabSentimentBtn" class="px-4 py-2 bg-gray-300 rounded">Sentiment</button>
+    <button id="tabTTSBtn" class="px-4 py-2 bg-gray-300 rounded">Text-to-Speech</button>
+  </div>
 
-    <!-- Tab Contents -->
-    <div id="summarizer" class="tab-content">
-        <textarea id="sumInput" class="w-full p-3 border rounded mb-3" rows="6" placeholder="Enter text to summarize"></textarea>
-        <select id="sumLevel" class="mb-3 p-2 border rounded">
-            <option value="short">Short (2-3 sentences)</option>
-            <option value="medium">Medium (4-6 sentences)</option>
-            <option value="detailed">Detailed (6-8 sentences)</option>
-        </select>
-        <button onclick="summarizeText()" class="px-4 py-2 bg-green-500 text-white rounded">Summarize</button>
-        <div id="sumResult" class="mt-4 p-4 bg-gray-100 rounded"></div>
-    </div>
+  <!-- Summarization -->
+  <section id="tabSummarize" class="tab-content">
+    <textarea id="summarize-input" rows="6" class="w-full p-3 border rounded mb-3" placeholder="Enter text to summarize..."></textarea>
+    <button id="summarize-btn" class="px-4 py-2 bg-green-600 text-white rounded">Summarize</button>
+    <div id="loading-summarize" class="mt-2 text-yellow-700 font-semibold"></div>
+    <pre id="summarize-result" class="mt-4 p-4 bg-gray-100 rounded whitespace-pre-wrap"></pre>
+  </section>
 
-    <div id="paraphraser" class="tab-content hidden">
-        <textarea id="paraInput" class="w-full p-3 border rounded mb-3" rows="6" placeholder="Enter text to paraphrase"></textarea>
-        <select id="paraLevel" class="mb-3 p-2 border rounded">
-            <option value="light">Light</option>
-            <option value="medium">Medium</option>
-            <option value="heavy">Heavy</option>
-        </select>
-        <button onclick="paraphraseText()" class="px-4 py-2 bg-green-500 text-white rounded">Paraphrase</button>
-        <div id="paraResult" class="mt-4 p-4 bg-gray-100 rounded"></div>
-    </div>
+  <!-- Sentiment -->
+  <section id="tabSentiment" class="tab-content hidden">
+    <textarea id="sentiment-input" rows="6" class="w-full p-3 border rounded mb-3" placeholder="Enter text for sentiment analysis..."></textarea>
+    <button id="sentiment-btn" class="px-4 py-2 bg-green-600 text-white rounded">Analyze Sentiment</button>
+    <div id="loading-sentiment" class="mt-2 text-yellow-700 font-semibold"></div>
+    <pre id="sentiment-result" class="mt-4 p-4 bg-gray-100 rounded whitespace-pre-wrap"></pre>
+  </section>
 
-    <div id="sentiment" class="tab-content hidden">
-        <textarea id="sentInput" class="w-full p-3 border rounded mb-3" rows="6" placeholder="Enter text to analyze sentiment"></textarea>
-        <button onclick="analyzeSentiment()" class="px-4 py-2 bg-green-500 text-white rounded">Analyze</button>
-        <div id="sentResult" class="mt-4 p-4 bg-gray-100 rounded"></div>
-    </div>
+  <!-- Text-to-Speech -->
+  <section id="tabTTS" class="tab-content hidden">
+    <textarea id="tts-input" rows="6" class="w-full p-3 border rounded mb-3" placeholder="Enter text to read aloud..."></textarea>
+    <button id="tts-btn" class="px-4 py-2 bg-green-600 text-white rounded">Speak</button>
+    <div id="loading-tts" class="mt-2 text-yellow-700 font-semibold"></div>
+    <audio id="tts-audio" hidden></audio>
+  </section>
 </div>
 
-<script>
-// Tab switching
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('bg-blue-500', 'text-white'));
-        btn.classList.add('bg-blue-500', 'text-white');
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.add('hidden'));
-        document.getElementById(btn.dataset.tab).classList.remove('hidden');
+<script type="module">
+import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0/dist/transformers.min.js";
+
+let summarizer, sentimentAnalyzer, tts;
+
+const summarizeBtn = document.getElementById("summarize-btn");
+const sentimentBtn = document.getElementById("sentiment-btn");
+const ttsBtn = document.getElementById("tts-btn");
+
+const loadingSummarize = document.getElementById("loading-summarize");
+const loadingSentiment = document.getElementById("loading-sentiment");
+const loadingTTS = document.getElementById("loading-tts");
+const audioElem = document.getElementById("tts-audio");
+
+// Disable buttons initially
+[summarizeBtn, sentimentBtn, ttsBtn].forEach(btn => btn.disabled = true);
+
+// Simple tab switching logic
+const tabs = {
+  tabSummarizeBtn: "tabSummarize",
+  tabSentimentBtn: "tabSentiment",
+  tabTTSBtn: "tabTTS",
+};
+Object.keys(tabs).forEach(btnId => {
+  document.getElementById(btnId).addEventListener("click", () => {
+    Object.values(tabs).forEach(tabId => document.getElementById(tabId).classList.add("hidden"));
+    document.getElementById(tabs[btnId]).classList.remove("hidden");
+
+    // Button color toggle
+    Object.keys(tabs).forEach(id => {
+      const btn = document.getElementById(id);
+      if (id === btnId) {
+        btn.classList.remove("bg-gray-300");
+        btn.classList.add("bg-blue-600", "text-white");
+      } else {
+        btn.classList.remove("bg-blue-600", "text-white");
+        btn.classList.add("bg-gray-300");
+      }
     });
+  });
 });
 
-// AI Functions (Basic Demo Logic)
-async function summarizeText() {
-    const text = document.getElementById("sumInput").value;
-    const level = document.getElementById("sumLevel").value;
-    document.getElementById("sumResult").innerText = `Summarized (${level}) version of: ${text}`;
+window.addEventListener("DOMContentLoaded", async () => {
+  loadingSummarize.textContent = "⏳ Downloading summarizer model...";
+  loadingSentiment.textContent = "⏳ Downloading sentiment model...";
+  loadingTTS.textContent = "⏳ Downloading TTS model...";
+
+  try {
+    summarizer = await pipeline("summarization", "Xenova/distilbart-cnn-6-6");
+    loadingSummarize.textContent = "✅ Summarizer loaded!";
+    summarizeBtn.disabled = false;
+
+    sentimentAnalyzer = await pipeline("sentiment-analysis");
+    loadingSentiment.textContent = "✅ Sentiment model loaded!";
+    sentimentBtn.disabled = false;
+
+    tts = await pipeline("text-to-speech", "Xenova/speecht5_tts");
+    loadingTTS.textContent = "✅ TTS model loaded!";
+    ttsBtn.disabled = false;
+  } catch (err) {
+    console.error("Model loading error:", err);
+    loadingSummarize.textContent = "❌ Failed to load summarizer.";
+    loadingSentiment.textContent = "❌ Failed to load sentiment.";
+    loadingTTS.textContent = "❌ Failed to load TTS.";
+  }
+});
+
+// Helper to show processing state on buttons
+function showProcessing(btn, isProcessing) {
+  if (isProcessing) {
+    btn.dataset.origText = btn.textContent;
+    btn.textContent = "⏳ Processing...";
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.origText;
+    btn.disabled = false;
+  }
 }
 
-async function paraphraseText() {
-    const text = document.getElementById("paraInput").value;
-    const level = document.getElementById("paraLevel").value;
-    document.getElementById("paraResult").innerText = `Paraphrased (${level}) version of: ${text}`;
-}
+// Summarize
+summarizeBtn.addEventListener("click", async () => {
+  const input = document.getElementById("summarize-input").value.trim();
+  if (!input) return alert("Enter text to summarize");
+  showProcessing(summarizeBtn, true);
+  loadingSummarize.textContent = "";
 
-async function analyzeSentiment() {
-    const text = document.getElementById("sentInput").value;
-    const model = await toxicity.load(0.9);
-    const predictions = await model.classify([text]);
-    document.getElementById("sentResult").innerText = JSON.stringify(predictions, null, 2);
-}
+  try {
+    const result = await summarizer(input, { max_length: 100 });
+    document.getElementById("summarize-result").textContent = result[0].summary_text;
+  } catch (err) {
+    console.error("Summarization error:", err);
+    alert("Error during summarization. See console.");
+  }
+  showProcessing(summarizeBtn, false);
+});
+
+// Sentiment
+sentimentBtn.addEventListener("click", async () => {
+  const input = document.getElementById("sentiment-input").value.trim();
+  if (!input) return alert("Enter text for sentiment analysis");
+  showProcessing(sentimentBtn, true);
+  loadingSentiment.textContent = "";
+
+  try {
+    const result = await sentimentAnalyzer(input);
+    const output = result.map(r => `${r.label}: ${(r.score * 100).toFixed(1)}%`).join("\n");
+    document.getElementById("sentiment-result").textContent = output;
+  } catch (err) {
+    console.error("Sentiment analysis error:", err);
+    alert("Error during sentiment analysis. See console.");
+  }
+  showProcessing(sentimentBtn, false);
+});
+
+// Text-to-Speech
+ttsBtn.addEventListener("click", () => {
+  const input = document.getElementById("tts-input").value.trim();
+  if (!input) return alert("Enter text to read aloud");
+
+  showProcessing(ttsBtn, true);
+
+  const utterance = new SpeechSynthesisUtterance(input);
+
+  utterance.onend = () => {
+    showProcessing(ttsBtn, false);
+  };
+  utterance.onerror = (e) => {
+    alert("Error during speech synthesis.");
+    showProcessing(ttsBtn, false);
+    console.error(e);
+  };
+
+  speechSynthesis.speak(utterance);
+});
 </script>
 {{ end }}
