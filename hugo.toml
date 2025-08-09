@@ -1,8 +1,12 @@
 baseURL = "https://aitextmagic.com"
 languageCode = "en-us"
 title = "AITextMagic - AI-Powered Text Generation"
+enableRobotsTXT = true
 [pagination]
   pagerSize = 6
+
+[outputs]
+  home = ["HTML", "RSS", "SITEMAP"]
 
 [params]
   author = "AITextMagic Team"
@@ -38,3 +42,4 @@ title = "AITextMagic - AI-Powered Text Generation"
   name = "Privacy Policy"
   url = "/privacy-policy/"
   weight = 40
+

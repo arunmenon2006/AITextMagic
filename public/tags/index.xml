@@ -2,59 +2,59 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on AITextMagic - AI-Powered Text Generation</title>
-    <link>http://localhost:1313/tags/</link>
+    <link>https://aitextmagic.com/tags/</link>
     <description>Recent content in Tags on AITextMagic - AI-Powered Text Generation</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 15 Jan 2025 10:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://aitextmagic.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AI</title>
-      <link>http://localhost:1313/tags/ai/</link>
+      <link>https://aitextmagic.com/tags/ai/</link>
       <pubDate>Wed, 15 Jan 2025 10:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/ai/</guid>
+      <guid>https://aitextmagic.com/tags/ai/</guid>
       <description></description>
     </item>
     <item>
       <title>Content Creation</title>
-      <link>http://localhost:1313/tags/content-creation/</link>
+      <link>https://aitextmagic.com/tags/content-creation/</link>
       <pubDate>Wed, 15 Jan 2025 10:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/content-creation/</guid>
+      <guid>https://aitextmagic.com/tags/content-creation/</guid>
       <description></description>
     </item>
     <item>
       <title>Technology</title>
-      <link>http://localhost:1313/tags/technology/</link>
+      <link>https://aitextmagic.com/tags/technology/</link>
       <pubDate>Wed, 15 Jan 2025 10:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/technology/</guid>
+      <guid>https://aitextmagic.com/tags/technology/</guid>
       <description></description>
     </item>
     <item>
       <title>Writing</title>
-      <link>http://localhost:1313/tags/writing/</link>
+      <link>https://aitextmagic.com/tags/writing/</link>
       <pubDate>Wed, 15 Jan 2025 10:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/writing/</guid>
+      <guid>https://aitextmagic.com/tags/writing/</guid>
       <description></description>
     </item>
     <item>
       <title>Best Practices</title>
-      <link>http://localhost:1313/tags/best-practices/</link>
+      <link>https://aitextmagic.com/tags/best-practices/</link>
       <pubDate>Fri, 10 Jan 2025 14:30:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/best-practices/</guid>
+      <guid>https://aitextmagic.com/tags/best-practices/</guid>
       <description></description>
     </item>
     <item>
       <title>Content Strategy</title>
-      <link>http://localhost:1313/tags/content-strategy/</link>
+      <link>https://aitextmagic.com/tags/content-strategy/</link>
       <pubDate>Fri, 10 Jan 2025 14:30:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/content-strategy/</guid>
+      <guid>https://aitextmagic.com/tags/content-strategy/</guid>
       <description></description>
     </item>
     <item>
       <title>Writing Tips</title>
-      <link>http://localhost:1313/tags/writing-tips/</link>
+      <link>https://aitextmagic.com/tags/writing-tips/</link>
       <pubDate>Fri, 10 Jan 2025 14:30:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/writing-tips/</guid>
+      <guid>https://aitextmagic.com/tags/writing-tips/</guid>
       <description></description>
     </item>
   </channel>
