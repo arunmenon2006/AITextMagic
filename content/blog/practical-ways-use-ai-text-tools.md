@@ -1,6 +1,6 @@
 ---
 title: "5 Practical Ways to Use AI Text Tools in Your Daily Work"
-date: 2025-08-13
+date: "2025-08-03T10:00:00Z"
 description: "Discover practical tips on how AI text tools can streamline your daily tasks and improve productivity."
 tags: ["AI tools", "productivity", "text summarization", "sentiment analysis", "text-to-speech"]
 ---

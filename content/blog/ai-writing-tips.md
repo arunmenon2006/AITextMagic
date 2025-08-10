@@ -1,6 +1,6 @@
 ---
 title: "10 Essential Tips for AI-Powered Content Writing"
-date: 2025-01-10T14:30:00Z
+date: 2025-08-01
 description: "Master the art of AI-assisted writing with these proven tips and techniques for creating compelling, engaging content."
 author: "Sarah Johnson"
 tags: ["Writing Tips", "AI", "Content Strategy", "Best Practices"]

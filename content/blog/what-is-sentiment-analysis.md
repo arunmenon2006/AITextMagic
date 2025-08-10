@@ -1,6 +1,6 @@
 ---
 title: "What Is Sentiment Analysis and Why It Matters"
-date: 2025-08-11
+date: "2025-08-05T10:00:00Z"
 description: "Learn about sentiment analysis, how it works, and how it helps businesses understand customer feedback."
 tags: ["sentiment analysis", "AI tools", "customer feedback"]
 ---

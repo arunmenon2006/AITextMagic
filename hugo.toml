@@ -3,8 +3,7 @@ languageCode = "en-us"
 title = "AITextMagic - AI-Powered Text Generation"
 enableRobotsTXT = true
 
-[pagination]
-  pagerSize = 6
+pagination.pagerSize  = 5
 
 [outputs]
   home = ["HTML", "RSS", "SITEMAP"]

@@ -2,30 +2,84 @@
 <section class="page-header">
     <div class="container">
         <h1>{{ .Title }}</h1>
-        {{ if .Description }}
-        <p class="page-description">{{ .Description }}</p>
-        {{ end }}
+        <p class="page-description">{{ .Params.description | default "Discover insights about AI-powered content creation, writing tips, and industry trends." }}</p>
     </div>
 </section>
 
-<section class="page-content">
+<section class="blog-content">
     <div class="container">
-        <div class="content">
-            {{ .Content }}
-        </div>
-        
-        {{ if .Pages }}
-        <div class="posts-grid">
-            {{ range .Pages }}
-            <article class="post-card">
-                <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-                <div class="post-meta">
-                    <time>{{ .Date.Format "January 2, 2006" }}</time>
+        {{ if .Paginator.Pages }}
+        <div class="blog-posts">
+            {{ range .Paginator.Pages.ByDate.Reverse }}
+            <article class="blog-post-card">
+                <div class="post-image">
+                    {{ if .Params.image }}
+                    <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}" loading="lazy">
+                    {{ else }}
+                    <div class="placeholder-image">
+                        <span class="blog-icon">📝</span>
+                    </div>
+                    {{ end }}
                 </div>
-                <p>{{ .Summary }}</p>
-                <a href="{{ .Permalink }}" class="read-more">Read More</a>
+
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}">
+                            {{ .Date.Format "January 2, 2006" }}
+                        </time>
+                        {{ if .Params.author }}
+                        <span class="author">by {{ .Params.author }}</span>
+                        {{ end }}
+                        {{ if .Params.readingTime }}
+                        <span class="reading-time">{{ .Params.readingTime }} min read</span>
+                        {{ end }}
+                    </div>
+
+                    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+
+                    {{ if .Params.description }}
+                    <p class="post-excerpt">{{ .Params.description }}</p>
+                    {{ else }}
+                    <p class="post-excerpt">{{ .Summary | truncate 150 }}...</p>
+                    {{ end }}
+
+                    {{ if .Params.tags }}
+                    <div class="post-tags">
+                        {{ range .Params.tags }}
+                        <span class="tag">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    {{ end }}
+
+                    <a href="{{ .Permalink }}" class="read-more">Read Full Article →</a>
+                </div>
             </article>
             {{ end }}
+        </div>
+
+        <!-- Pagination Controls -->
+        {{ if gt .Paginator.TotalPages 1 }}
+        <nav class="pagination mt-8 flex justify-center space-x-6">
+            {{ if .Paginator.HasPrev }}
+            <a href="{{ .Paginator.Prev.URL }}" class="btn btn-secondary">&larr; Previous</a>
+            {{ else }}
+            <span class="btn btn-disabled opacity-50 cursor-not-allowed">&larr; Previous</span>
+            {{ end }}
+
+            <span class="self-center">Page {{ .Paginator.PageNumber }} of {{ .Paginator.TotalPages }}</span>
+
+            {{ if .Paginator.HasNext }}
+            <a href="{{ .Paginator.Next.URL }}" class="btn btn-secondary">Next &rarr;</a>
+            {{ else }}
+            <span class="btn btn-disabled opacity-50 cursor-not-allowed">Next &rarr;</span>
+            {{ end }}
+        </nav>
+        {{ end }}
+
+        {{ else }}
+        <div class="no-posts text-center py-16">
+            <h3 class="text-2xl font-semibold">No blog posts yet</h3>
+            <p class="mt-2 text-gray-600">Check back soon for insights about AI-powered content creation!</p>
         </div>
         {{ end }}
     </div>

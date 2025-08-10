@@ -1,8 +1,10 @@
 ---
 title: "The Future of Content Creation with AI"
-date: 2025-08-14
+date: "2025-08-02T10:00:00Z"
+author: "AITextMagic Team"
 description: "Explore how AI is transforming content creation and what to expect in the coming years."
 tags: ["AI content", "future of work", "content creation", "AI tools"]
+draft: false
 ---
 
 Artificial intelligence is revolutionizing content creation by making it faster, smarter, and more accessible. Tools like AITextMagic empower writers, marketers, and businesses to produce high-quality content at scale.
