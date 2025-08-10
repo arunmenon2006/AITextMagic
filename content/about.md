@@ -1,6 +1,9 @@
 ---
 title: "About Us"
-date: 2024-08-10
+date: 2025-08-10
+draft: false
+type: "page"
+layout: "single"
 description: "Learn about AITextMagic, our mission, and how we empower content creators with AI-powered text tools."
 ---
 
@@ -35,4 +38,4 @@ Thank you for choosing AITextMagic. Let’s create amazing content together!
 
 ---
 
-If you have any questions or feedback, feel free to contact us anytime.
+

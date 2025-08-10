@@ -8,6 +8,10 @@ pagination.pagerSize  = 5
 [outputs]
   home = ["HTML", "RSS", "SITEMAP"]
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
 [params]
   author = "AITextMagic Team"
   description = "Free AI-powered tools for summarizing text, performing text sentiment analysis, and converting text to speech."

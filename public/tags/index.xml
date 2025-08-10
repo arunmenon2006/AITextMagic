@@ -30,17 +30,52 @@
       <description></description>
     </item>
     <item>
+      <title>AI Tools</title>
+      <link>http://localhost:1313/tags/ai-tools/</link>
+      <pubDate>Tue, 05 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/ai-tools/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Customer Feedback</title>
+      <link>http://localhost:1313/tags/customer-feedback/</link>
+      <pubDate>Tue, 05 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/customer-feedback/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sentiment Analysis</title>
+      <link>http://localhost:1313/tags/sentiment-analysis/</link>
+      <pubDate>Tue, 05 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/sentiment-analysis/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Accessibility</title>
+      <link>http://localhost:1313/tags/accessibility/</link>
+      <pubDate>Sun, 03 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/accessibility/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Text Summarization</title>
+      <link>http://localhost:1313/tags/text-summarization/</link>
+      <pubDate>Sun, 03 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/text-summarization/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Text-to-Speech</title>
+      <link>http://localhost:1313/tags/text-to-speech/</link>
+      <pubDate>Sun, 03 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/text-to-speech/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>AI Content</title>
       <link>http://localhost:1313/tags/ai-content/</link>
       <pubDate>Sat, 02 Aug 2025 10:00:00 +0000</pubDate>
       <guid>http://localhost:1313/tags/ai-content/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>AI Tools</title>
-      <link>http://localhost:1313/tags/ai-tools/</link>
-      <pubDate>Sat, 02 Aug 2025 10:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/ai-tools/</guid>
       <description></description>
     </item>
     <item>
@@ -60,8 +95,22 @@
     <item>
       <title>AI</title>
       <link>http://localhost:1313/tags/ai/</link>
-      <pubDate>Fri, 01 Aug 2025 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Aug 2025 10:00:00 +0000</pubDate>
       <guid>http://localhost:1313/tags/ai/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Technology</title>
+      <link>http://localhost:1313/tags/technology/</link>
+      <pubDate>Fri, 01 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/technology/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Writing</title>
+      <link>http://localhost:1313/tags/writing/</link>
+      <pubDate>Fri, 01 Aug 2025 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/writing/</guid>
       <description></description>
     </item>
     <item>

@@ -1,12 +1,14 @@
 ---
 title: "Privacy Policy"
 date: 2025-08-10
-description: "Privacy Policy for AITextMagic"
+draft: false
+type: "page"
+layout: "single"
 ---
 
 # Privacy Policy
 
-**Last updated:** [Insert Date]
+**Last updated:** 2025-08-10
 
 Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you visit and use AITextMagic (“we,” “us,” or “our”).
 
