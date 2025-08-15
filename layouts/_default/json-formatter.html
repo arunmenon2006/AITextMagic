@@ -1,80 +1,691 @@
 {{ define "main" }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsoneditor@9.10.0/dist/jsoneditor.min.css">
+<!-- JSONEditor CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.0/dist/jsoneditor.min.css" />
+
 <style>
-  body {
-    font-family: system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+  /* Smooth scrollbars */
+  * { scrollbar-width: thin; scrollbar-color: #9CA3AF transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-thumb { background: #9CA3AF; border-radius: 8px; }
+  
+  .btn { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    border-radius: 1rem; 
+    padding: 0.5rem 0.75rem; 
+    font-size: 0.875rem; 
+    font-weight: 500; 
+    box-shadow: 0 10px 25px -10px rgba(0,0,0,0.2); 
+    transition: all 0.2s ease; 
+    cursor: pointer;
+    border: none;
   }
-  :root {
-    --bg: #f4f4f4;
-    --text: #222;
-    --bg-dark: #1e1e1e;
-    --text-dark: #ddd;
+  .btn:hover { 
+    transform: translateY(-1px); 
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3); 
   }
-  .dark {
-    --bg: var(--bg-dark);
-    --text: var(--text-dark);
+  .btn-ghost { 
+    background: white; 
+    color: #374151; 
+    border: 1px solid #E5E7EB; 
   }
-  #editor {
-    height: 600px;
-    border: 1px solid #ccc;
+  .btn-primary { 
+    background: #4F46E5; 
+    color: white; 
   }
-  .toolbar {
-    margin-bottom: 1rem;
+  .btn-danger { 
+    background: #DC2626; 
+    color: white; 
+  }
+  
+  .chip { 
+    border-radius: 0.75rem; 
+    background: #F3F4F6; 
+    padding: 0.25rem 0.5rem; 
+    font-size: 0.75rem; 
+    color: #374151; 
+  }
+  
+  .tooltip { position: relative; }
+  .tooltip:hover::after { 
+    content: attr(data-tip); 
+    position: absolute; 
+    top: 110%; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: rgba(0,0,0,0.85); 
+    color: white; 
+    padding: 6px 8px; 
+    border-radius: 8px; 
+    white-space: nowrap; 
+    font-size: 12px; 
+    z-index: 30; 
+  }
+  
+  .jsoneditor, .jsoneditor-mode-code, .jsoneditor-mode-tree { height: 100% !important; }
+  .jsoneditor-statusbar { display: none; }
+  
+  .dropzone { 
+    border: 2px dashed #CBD5E1; 
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+    color: #6B7280;
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    transition: all 0.2s ease;
+  }
+  .dropzone.dragover { 
+    border-color: #6366F1; 
+    background: rgba(99,102,241,0.07); 
+  }
+  
+  .hidden-input { 
+    position: absolute; 
+    inset: 0; 
+    opacity: 0; 
+    cursor: pointer; 
+  }
+  
+  .kbd { 
+    border-radius: 0.5rem; 
+    border: 1px solid #D1D5DB; 
+    background: #F9FAFB; 
+    padding: 0.125rem 0.375rem; 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    color: #374151; 
+  }
+  
+  .badge { 
+    border-radius: 9999px; 
+    background: #EEF2FF; 
+    padding: 0.125rem 0.5rem; 
+    font-size: 0.75rem; 
+    color: #4338CA; 
+  }
+  
+  .toggle { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    cursor: pointer; 
+    user-select: none; 
+  }
+  
+  .toggle input[type="checkbox"] { display: none; }
+  
+  /* Dark mode styles */
+  .dark .btn-ghost { 
+    background: #374151; 
+    color: #F9FAFB; 
+    border-color: #4B5563; 
+  }
+  .dark .chip { 
+    background: #374151; 
+    color: #F9FAFB; 
+  }
+  .dark .kbd { 
+    background: #374151; 
+    color: #F9FAFB; 
+    border-color: #4B5563; 
+  }
+  .dark .badge { 
+    background: #312E81; 
+    color: #C7D2FE; 
+  }
+  .dark .dropzone { 
+    border-color: #4B5563; 
+    color: #9CA3AF; 
+  }
+  .dark .dropzone.dragover { 
+    border-color: #6366F1; 
+    background: rgba(99,102,241,0.1); 
+  }
+  
+  /* Layout styles */
+  .json-formatter-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .toolbar-grid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  @media (min-width: 768px) {
+    .toolbar-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  
+  .toolbar-buttons {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
   }
-  button {
-    padding: 0.4rem 0.8rem;
-    cursor: pointer;
+  
+  .toolbar-search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+  
+  .editors-grid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .editors-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .editor-section {
+    border-radius: 1.5rem;
+    border: 1px solid #E5E7EB;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 10px 25px -10px rgba(0,0,0,0.2);
+  }
+  
+  .dark .editor-section {
+    border-color: #374151;
+    background: #1F2937;
+  }
+  
+  .section-header {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6B7280;
+  }
+  
+  .dark .section-title {
+    color: #9CA3AF;
+  }
+  
+  .search-input {
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid #D1D5DB;
+    background: white;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .dark .search-input {
+    background: #1F2937;
+    border-color: #4B5563;
+    color: white;
+  }
+  
+  .indent-select {
+    border-radius: 0.75rem;
+    border: 1px solid #D1D5DB;
+    background: white;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .dark .indent-select {
+    background: #1F2937;
+    border-color: #4B5563;
+    color: white;
+  }
+  
+  .footer-info {
+    margin-top: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid #E5E7EB;
+    background: white;
+    padding: 1rem;
+    font-size: 0.875rem;
+    color: #6B7280;
+    box-shadow: 0 10px 25px -10px rgba(0,0,0,0.2);
+  }
+  
+  .dark .footer-info {
+    border-color: #374151;
+    background: #1F2937;
+    color: #9CA3AF;
+  }
+  
+  .toast {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    border-radius: 1rem;
+    background: #1F2937;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: white;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+    pointer-events: none;
+    display: none;
   }
 </style>
 
-<div class="toolbar">
-  <button id="formatBtn">Format</button>
-  <button id="minifyBtn">Minify</button>
-  <button id="validateBtn">Validate</button>
-  <button id="darkModeBtn">Toggle Dark Mode</button>
+<!-- Main Content -->
+<div class="json-formatter-container">
+  <!-- Toolbar -->
+  <div class="toolbar-grid">
+    <div class="toolbar-buttons">
+      <button id="formatBtn" class="btn btn-primary tooltip" data-tip="Prettify JSON (indent)">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 6h16v2H4zM4 11h10v2H4zM4 16h16v2H4z"/>
+        </svg>
+        Format
+      </button>
+      <button id="minifyBtn" class="btn btn-ghost tooltip" data-tip="Minify JSON (remove whitespace)">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 6h18v2H3zM3 11h12v2H3zM3 16h18v2H3z"/>
+        </svg>
+        Minify
+      </button>
+      <button id="validateBtn" class="btn btn-ghost tooltip" data-tip="Validate JSON">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        Validate
+      </button>
+      <button id="copyBtn" class="btn btn-ghost tooltip" data-tip="Copy JSON to clipboard">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v16h13c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 18H8V7h11v16z"/>
+        </svg>
+        Copy
+      </button>
+      <button id="downloadBtn" class="btn btn-ghost tooltip" data-tip="Download JSON as file">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M5 20h14v-2H5v2zM12 2 6.5 7.5h3.5V15h4V7.5H17.5z"/>
+        </svg>
+        Download
+      </button>
+      <label class="btn btn-ghost tooltip relative" data-tip="Upload JSON file">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 15v4H5v-4H3v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4h-2zM11 7.83 8.41 10.41 7 9l5-5 5 5-1.41 1.41L13 7.83V16h-2z"/>
+        </svg>
+        Upload
+        <input id="fileInput" type="file" accept=".json,application/json,.txt" class="hidden-input" />
+      </label>
+      <button id="expandBtn" class="btn btn-ghost tooltip" data-tip="Expand all nodes">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+        Expand
+      </button>
+      <button id="collapseBtn" class="btn btn-ghost tooltip" data-tip="Collapse all nodes">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 14l5-5 5 5z"/>
+        </svg>
+        Collapse
+      </button>
+      <label class="toggle tooltip" data-tip="Sort object keys alphabetically">
+        <input id="sortToggle" type="checkbox" />
+        <span class="chip">Sort Keys</span>
+      </label>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 0.875rem; color: #6B7280;">Indent</span>
+        <select id="indentSelect" class="indent-select">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+        </select>
+      </div>
+      <button id="clearBtn" class="btn btn-danger tooltip" data-tip="Clear editors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 6h18v2H3zm2 3h14l-1 11H6L5 9zm7-8 4 4h-3v3h-2V5H8l4-4z"/>
+        </svg>
+        Clear
+      </button>
+    </div>
+    <div class="toolbar-search">
+      <input id="searchInput" class="search-input" placeholder="Search (JSONPath or text)..." />
+      <button id="searchBtn" class="btn btn-ghost">Search</button>
+    </div>
+  </div>
+
+  <!-- Editors -->
+  <div class="editors-grid">
+    <!-- Code Editor -->
+    <section class="editor-section">
+      <div class="section-header">
+        <h2 class="section-title">Code</h2>
+        <span id="byteBadge" class="badge">0 bytes</span>
+      </div>
+      <div id="codeEditor" style="height: 500px; width: 100%;"></div>
+      <div id="dropzone" class="dropzone">Drag & drop a .json file here</div>
+    </section>
+
+    <!-- Tree Viewer -->
+    <section class="editor-section">
+      <div class="section-header">
+        <h2 class="section-title">Tree</h2>
+        <div style="font-size: 0.75rem; color: #6B7280;" id="stats"></div>
+      </div>
+      <div id="treeEditor" style="height: 500px; width: 100%;"></div>
+    </section>
+  </div>
+
+  <!-- Footer Info -->
+  <div class="footer-info">
+    <p style="margin-bottom: 0.5rem;">Your JSON is processed <strong>entirely in your browser</strong>. Nothing is uploaded.</p>
+    <p>Shortcuts: <span class="kbd">⌘/Ctrl</span> + <span class="kbd">K</span> = Clear</p>
+  </div>
 </div>
-<div id="editor"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/jsoneditor@9.10.0/dist/jsoneditor.min.js"></script>
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- JSONEditor JS -->
+<script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.0/dist/jsoneditor.min.js"></script>
+
 <script>
-  const container = document.getElementById("editor");
-  const options = { mode: "code" };
-  const editor = new JSONEditor(container, options);
+// ---- Utilities ----
+const $ = (sel) => document.querySelector(sel);
+const showToast = (msg, ms = 1500) => {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', ms);
+};
 
-  document.getElementById("formatBtn").onclick = () => {
-    try {
-      const json = editor.get();
-      editor.update(json);
-    } catch (err) {
-      alert("Invalid JSON: " + err);
+const pretty = (obj, indent) => JSON.stringify(obj, null, indent);
+const minify = (obj) => JSON.stringify(obj);
+
+const getIndent = () => parseInt($('#indentSelect').value, 10) || 2;
+const setBytes = (str) => $('#byteBadge').textContent = new Blob([str]).size.toLocaleString() + ' bytes';
+
+function safeParse(text) {
+  try { return [JSON.parse(text), null]; }
+  catch (err) { return [null, err.message]; }
+}
+
+// ---- Editors ----
+const codeEditor = new JSONEditor(document.getElementById('codeEditor'), {
+  mode: 'code',
+  mainMenuBar: false,
+  statusBar: false,
+  onChangeText: handleCodeChange,
+  indentation: getIndent(),
+});
+
+const treeEditor = new JSONEditor(document.getElementById('treeEditor'), {
+  mode: 'tree',
+  mainMenuBar: false,
+  navigationBar: true,
+  statusBar: false,
+  onChange: handleTreeChange,
+});
+
+function updateStats(obj) {
+  try {
+    let nodes = 0, arrays = 0, objects = 0, maxDepth = 0;
+    const walk = (val, depth=1) => {
+      maxDepth = Math.max(maxDepth, depth);
+      nodes++;
+      if (Array.isArray(val)) { 
+        arrays++; 
+        for (const v of val) walk(v, depth+1); 
+      }
+      else if (val && typeof val === 'object') { 
+        objects++; 
+        for (const k in val) walk(val[k], depth+1); 
+      }
+    };
+    walk(obj);
+    $('#stats').textContent = `nodes: ${nodes.toLocaleString()} • arrays: ${arrays} • objects: ${objects} • depth: ${maxDepth}`;
+  } catch { 
+    $('#stats').textContent = ''; 
+  }
+}
+
+let suppressSync = false;
+
+function handleCodeChange(text) {
+  setBytes(text ?? '');
+  if (suppressSync) return;
+  const [obj, err] = safeParse(text || '');
+  if (!err) {
+    suppressSync = true;
+    try { 
+      treeEditor.update(obj); 
+      updateStats(obj); 
+    } finally { 
+      suppressSync = false; 
     }
-  };
+  }
+}
 
-  document.getElementById("minifyBtn").onclick = () => {
-    try {
-      const json = editor.get();
-      editor.setText(JSON.stringify(json));
-    } catch (err) {
-      alert("Invalid JSON: " + err);
+function handleTreeChange() {
+  if (suppressSync) return;
+  try {
+    const obj = treeEditor.get();
+    suppressSync = true;
+    const content = pretty(obj, getIndent());
+    codeEditor.updateText(content);
+    setBytes(content);
+    updateStats(obj);
+  } catch (e) { 
+    // ignore while editing invalid node 
+  } finally { 
+    suppressSync = false; 
+  }
+}
+
+// Initial content
+const DEMO = { 
+  welcome: "👋 Paste or drop your JSON on the left.", 
+  features: ["Format","Minify","Validate","Search","Sort Keys","Expand/Collapse","Download/Upload"], 
+  privacy: "Your JSON never leaves this browser." 
+};
+const content = pretty(DEMO, getIndent());
+codeEditor.updateText(content);
+handleCodeChange(codeEditor.getText());
+
+// Keep indentation in sync
+$('#indentSelect').addEventListener('change', () => {
+  const indent = getIndent();
+  const [obj, err] = safeParse(codeEditor.getText());
+  if (!err) {
+    const text = pretty(obj, indent);
+    codeEditor.updateText(text);
+    showToast(`Indent set to ${indent}`);
+  }
+});
+
+// Buttons
+$('#formatBtn').addEventListener('click', () => {
+  const [obj, err] = safeParse(codeEditor.getText());
+  if (err) return showToast('❌ Invalid JSON — cannot format');
+  const text = pretty(obj, getIndent());
+  codeEditor.updateText(text); 
+  setBytes(text); 
+  updateStats(obj); 
+  showToast('✨ Formatted');
+  if ($('#sortToggle').checked) {
+    sortKeysAndUpdate();
+  }
+});
+
+$('#minifyBtn').addEventListener('click', () => {
+  const [obj, err] = safeParse(codeEditor.getText());
+  if (err) return showToast('❌ Invalid JSON — cannot minify');
+  const text = minify(obj);
+  codeEditor.updateText(text); 
+  setBytes(text); 
+  updateStats(obj); 
+  showToast('🧹 Minified');
+});
+
+$('#validateBtn').addEventListener('click', () => {
+  const [, err] = safeParse(codeEditor.getText());
+  if (err) showToast('❌ Invalid JSON: ' + err);
+  else showToast('✅ JSON is valid');
+});
+
+$('#copyBtn').addEventListener('click', async () => {
+  try { 
+    await navigator.clipboard.writeText(codeEditor.getText()); 
+    showToast('📋 Copied'); 
+  }
+  catch { 
+    showToast('⚠️ Clipboard not available'); 
+  }
+});
+
+$('#downloadBtn').addEventListener('click', () => {
+  const text = codeEditor.getText() || '';
+  const blob = new Blob([text], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'data.json'; 
+  a.click(); 
+  URL.revokeObjectURL(a.href);
+  showToast('⬇️ Downloaded');
+});
+
+// Upload
+$('#fileInput').addEventListener('change', handleFile);
+function handleFile(e) {
+  const file = e.target.files?.[0]; 
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => { 
+    const text = reader.result?.toString() || ''; 
+    codeEditor.updateText(text); 
+    handleCodeChange(text); 
+    showToast(`📄 Loaded ${file.name}`); 
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// Drag & Drop
+const drop = $('#dropzone');
+['dragenter','dragover'].forEach(evt => 
+  drop.addEventListener(evt, (e) => { 
+    e.preventDefault(); 
+    drop.classList.add('dragover'); 
+  })
+);
+['dragleave','drop'].forEach(evt => 
+  drop.addEventListener(evt, () => drop.classList.remove('dragover'))
+);
+drop.addEventListener('drop', (e) => { 
+  e.preventDefault(); 
+  const file = e.dataTransfer.files?.[0]; 
+  if (file) { 
+    const r = new FileReader(); 
+    r.onload = () => { 
+      const text = r.result?.toString() || ''; 
+      codeEditor.updateText(text); 
+      handleCodeChange(text); 
+      showToast(`🔥 Dropped ${file.name}`); 
+    }; 
+    r.readAsText(file); 
+  } 
+});
+
+// Expand / Collapse
+$('#expandBtn').addEventListener('click', () => {
+  treeEditor.expandAll();
+  showToast('📂 Expanded all');
+});
+$('#collapseBtn').addEventListener('click', () => {
+  treeEditor.collapseAll();
+  showToast('📁 Collapsed all');
+});
+
+// Sort keys
+function sortKeysDeep(value) {
+  if (Array.isArray(value)) return value.map(sortKeysDeep);
+  if (value && typeof value === 'object') {
+    const out = {};
+    Object.keys(value).sort((a,b) => a.localeCompare(b)).forEach(k => out[k] = sortKeysDeep(value[k]));
+    return out;
+  }
+  return value;
+}
+function sortKeysAndUpdate() {
+  const [obj, err] = safeParse(codeEditor.getText());
+  if (err) return showToast('❌ Invalid JSON — cannot sort');
+  const sorted = sortKeysDeep(obj);
+  const text = pretty(sorted, getIndent());
+  codeEditor.updateText(text); 
+  setBytes(text); 
+  treeEditor.update(sorted); 
+  updateStats(sorted); 
+  showToast('🔤 Keys sorted');
+}
+$('#sortToggle').addEventListener('change', (e) => { 
+  if (e.target.checked) sortKeysAndUpdate(); 
+});
+
+// Search (simplified text search)
+$('#searchBtn').addEventListener('click', doSearch);
+$('#searchInput').addEventListener('keydown', (e) => { 
+  if (e.key === 'Enter') doSearch(); 
+});
+function doSearch() {
+  const q = $('#searchInput').value.trim();
+  if (!q) return showToast('Type text to search');
+  
+  const text = codeEditor.getText();
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx >= 0) {
+    showToast('🔎 Match found');
+    // Try to highlight in editor if ace editor is available
+    if (codeEditor.aceEditor && codeEditor.aceEditor.selection) {
+      const pos = codeEditor.aceEditor.session.doc.indexToPosition(idx);
+      const endPos = codeEditor.aceEditor.session.doc.indexToPosition(idx + q.length);
+      codeEditor.aceEditor.selection.setRange({
+        start: pos,
+        end: endPos
+      });
+      codeEditor.aceEditor.centerSelection();
     }
-  };
+  } else {
+    showToast('🙅 No match');
+  }
+}
 
-  document.getElementById("validateBtn").onclick = () => {
-    try {
-      editor.get();
-      alert("Valid JSON!");
-    } catch (err) {
-      alert("Invalid JSON: " + err);
-    }
-  };
+// Clear
+$('#clearBtn').addEventListener('click', () => { 
+  codeEditor.updateText(''); 
+  treeEditor.update({}); 
+  setBytes(''); 
+  updateStats({}); 
+  showToast('🗑️ Cleared');
+});
 
-  document.getElementById("darkModeBtn").onclick = () => {
-    document.body.classList.toggle("dark");
-  };
+// Keyboard shortcuts
+window.addEventListener('keydown', (e) => { 
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { 
+    e.preventDefault(); 
+    $('#clearBtn').click(); 
+  }
+});
 </script>
+
 {{ end }}
