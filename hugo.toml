@@ -45,5 +45,5 @@ pagination.pagerSize  = 5
 [[menus.main]]
   name = "Privacy Policy"
   url = "/privacy-policy/"
-  weight = 40
+  weight = 50
 
