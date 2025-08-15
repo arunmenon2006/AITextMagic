@@ -1,0 +1,80 @@
+{{ define "main" }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsoneditor@9.10.0/dist/jsoneditor.min.css">
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  :root {
+    --bg: #f4f4f4;
+    --text: #222;
+    --bg-dark: #1e1e1e;
+    --text-dark: #ddd;
+  }
+  .dark {
+    --bg: var(--bg-dark);
+    --text: var(--text-dark);
+  }
+  #editor {
+    height: 600px;
+    border: 1px solid #ccc;
+  }
+  .toolbar {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  button {
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+  }
+</style>
+
+<div class="toolbar">
+  <button id="formatBtn">Format</button>
+  <button id="minifyBtn">Minify</button>
+  <button id="validateBtn">Validate</button>
+  <button id="darkModeBtn">Toggle Dark Mode</button>
+</div>
+<div id="editor"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/jsoneditor@9.10.0/dist/jsoneditor.min.js"></script>
+<script>
+  const container = document.getElementById("editor");
+  const options = { mode: "code" };
+  const editor = new JSONEditor(container, options);
+
+  document.getElementById("formatBtn").onclick = () => {
+    try {
+      const json = editor.get();
+      editor.update(json);
+    } catch (err) {
+      alert("Invalid JSON: " + err);
+    }
+  };
+
+  document.getElementById("minifyBtn").onclick = () => {
+    try {
+      const json = editor.get();
+      editor.setText(JSON.stringify(json));
+    } catch (err) {
+      alert("Invalid JSON: " + err);
+    }
+  };
+
+  document.getElementById("validateBtn").onclick = () => {
+    try {
+      editor.get();
+      alert("Valid JSON!");
+    } catch (err) {
+      alert("Invalid JSON: " + err);
+    }
+  };
+
+  document.getElementById("darkModeBtn").onclick = () => {
+    document.body.classList.toggle("dark");
+  };
+</script>
+{{ end }}
