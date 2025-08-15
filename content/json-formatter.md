@@ -9,7 +9,7 @@ menu:
   main:
     name: "JSON Formatter"
     url: "/json-formatter/"
-    weight: 50
+    weight: 40
 ---
 
 Use our free JSON Formatter & Validator tool to instantly format, beautify, or minify your JSON data. Whether you're a developer or a casual user, this tool helps make your JSON easier to read and debug.
