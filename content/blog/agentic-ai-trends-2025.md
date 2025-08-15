@@ -6,7 +6,6 @@ description: "Discover the top agentic AI trends shaping 2025. From multi-agent 
 tags: ["Agentic AI", "AI Agents", "Artificial Intelligence", "Machine Learning", "Automation", "AI Trends 2025", "Autonomous AI"]
 categories: ["AI Trends", "Technology", "Business Intelligence"]
 author: "AI Text Magic Team"
-featured_image: "/images/agentic-ai-trends-2025.jpg"
 toc: true
 seo_keywords: ["agentic AI trends 2025", "AI agents", "autonomous artificial intelligence", "multi-agent systems", "AI automation"]
 ---
