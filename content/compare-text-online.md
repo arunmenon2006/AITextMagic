@@ -9,7 +9,7 @@ menu:
   main:
     name: "Text Compare"
     url: "/compare-text-online/"
-    weight: 40
+    weight: 50
 ---
 
 Use our free Text Comparison Tool to instantly compare and find differences between two texts, documents, or code files. Whether you're a developer, writer, or content creator, this tool helps you identify changes, additions, and deletions with precision.
