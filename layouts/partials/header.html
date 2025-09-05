@@ -2,20 +2,39 @@
     <div class="container">
         <nav class="navbar">
             <div class="navbar-brand">
-    <a href="{{ "/" | relURL }}" class="logo">
-        <div class="logo-text">AITextMagic</div>
-        <div class="logo-tagline">AI-Powered Text Generation</div>
-    </a>
-</div>
+                <a href="{{ "/" | relURL }}" class="logo">
+                    <div class="logo-text">AITextMagic</div>
+                    <div class="logo-tagline">AI-Powered Text Generation</div>
+                </a>
+            </div>
             
             <div class="navbar-menu" id="navbar-menu">
                 <ul class="navbar-nav">
+                    {{ $currentPage := . }}
                     {{ range .Site.Menus.main }}
-                    <li class="nav-item">
-                        <a href="{{ .URL | relURL }}" class="nav-link {{ if $.IsMenuCurrent "main" . }}active{{ end }}">
-                            {{ .Name }}
-                        </a>
-                    </li>
+                        {{ if not .Parent }}
+                            {{ $hasChildren := where $.Site.Menus.main "Parent" .Name }}
+                            <li class="nav-item{{ if $hasChildren }} has-dropdown{{ end }}">
+                                <a href="{{ .URL | relURL }}" class="nav-link {{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}">
+                                    {{ .Name }}
+                                    {{ if $hasChildren }}
+                                        <span class="dropdown-arrow">▼</span>
+                                    {{ end }}
+                                </a>
+                                
+                                {{ if $hasChildren }}
+                                    <ul class="dropdown-menu">
+                                        {{ range $hasChildren }}
+                                            <li class="dropdown-item">
+                                                <a href="{{ .URL | relURL }}" class="dropdown-link {{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}">
+                                                    {{ .Name }}
+                                                </a>
+                                            </li>
+                                        {{ end }}
+                                    </ul>
+                                {{ end }}
+                            </li>
+                        {{ end }}
                     {{ end }}
                 </ul>
             </div>
