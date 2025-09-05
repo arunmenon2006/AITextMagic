@@ -113,7 +113,6 @@
   }
 </style>
 
-{{< raw >}}
 <script>
   function compareTexts() {
     const text1 = document.getElementById("text1").value.split(/\s+/);
@@ -122,7 +121,6 @@
     const resultsDiv = document.getElementById("results");
     resultsDiv.innerHTML = "";
 
-    // Run diff
     const diff = diffTexts(text1, text2);
 
     if (viewMode === "side") {
@@ -132,43 +130,26 @@
     }
   }
 
-  // Basic diff algorithm (LCS based)
   function diffTexts(a, b) {
     const m = a.length, n = b.length;
     const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
 
-    // Build LCS table
     for (let i = m - 1; i >= 0; i--) {
       for (let j = n - 1; j >= 0; j--) {
-        if (a[i] === b[j]) {
-          dp[i][j] = dp[i + 1][j + 1] + 1;
-        } else {
-          dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
-        }
+        if (a[i] === b[j]) dp[i][j] = dp[i + 1][j + 1] + 1;
+        else dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
       }
     }
 
-    // Backtrack to get diff
     let i = 0, j = 0;
     const diff = [];
     while (i < m && j < n) {
-      if (a[i] === b[j]) {
-        diff.push({ type: "unchanged", word: a[i] });
-        i++; j++;
-      } else if (dp[i + 1][j] >= dp[i][j + 1]) {
-        diff.push({ type: "removed", word: a[i] });
-        i++;
-      } else {
-        diff.push({ type: "added", word: b[j] });
-        j++;
-      }
+      if (a[i] === b[j]) { diff.push({ type: "unchanged", word: a[i] }); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) { diff.push({ type: "removed", word: a[i++] }); }
+      else { diff.push({ type: "added", word: b[j++] }); }
     }
-    while (i < m) {
-      diff.push({ type: "removed", word: a[i++] });
-    }
-    while (j < n) {
-      diff.push({ type: "added", word: b[j++] });
-    }
+    while (i < m) diff.push({ type: "removed", word: a[i++] });
+    while (j < n) diff.push({ type: "added", word: b[j++] });
 
     return diff;
   }
@@ -186,16 +167,9 @@
       const spanLeft = document.createElement("span");
       const spanRight = document.createElement("span");
 
-      if (part.type === "unchanged") {
-        spanLeft.textContent = part.word + " ";
-        spanRight.textContent = part.word + " ";
-      } else if (part.type === "removed") {
-        spanLeft.textContent = part.word + " ";
-        spanLeft.className = "diff-removed";
-      } else if (part.type === "added") {
-        spanRight.textContent = part.word + " ";
-        spanRight.className = "diff-added";
-      }
+      if (part.type === "unchanged") { spanLeft.textContent = part.word + " "; spanRight.textContent = part.word + " "; }
+      else if (part.type === "removed") { spanLeft.textContent = part.word + " "; spanLeft.className = "diff-removed"; }
+      else if (part.type === "added") { spanRight.textContent = part.word + " "; spanRight.className = "diff-added"; }
 
       leftResult.appendChild(spanLeft);
       rightResult.appendChild(spanRight);
@@ -214,13 +188,9 @@
       const span = document.createElement("span");
       span.textContent = part.word + " ";
 
-      if (part.type === "unchanged") {
-        span.className = "diff-unchanged";
-      } else if (part.type === "removed") {
-        span.className = "diff-removed";
-      } else if (part.type === "added") {
-        span.className = "diff-added";
-      }
+      if (part.type === "unchanged") span.className = "diff-unchanged";
+      else if (part.type === "removed") span.className = "diff-removed";
+      else if (part.type === "added") span.className = "diff-added";
 
       box.appendChild(span);
     });
@@ -228,6 +198,5 @@
     return box;
   }
 </script>
-{{< /raw >}}
 
 {{ end }}
