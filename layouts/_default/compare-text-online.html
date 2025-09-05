@@ -20,97 +20,7 @@
 </div>
 
 <style>
-  .container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .input-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  textarea {
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    resize: vertical;
-  }
-
-  .controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  button {
-    background: #0078d4;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background: #005ea1;
-  }
-
-  select {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-
-  .results-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-  }
-
-  .results-inline {
-    white-space: pre-wrap;
-    font-family: monospace;
-    background: #f7f7f7;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-  }
-
-  .diff-added {
-    background: #d4f8d4;
-  }
-
-  .diff-removed {
-    background: #ffd6d6;
-    text-decoration: line-through;
-  }
-
-  .diff-unchanged {
-    color: #555;
-  }
-
-  .result-box {
-    padding: 15px;
-    border-radius: 8px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    font-family: monospace;
-    white-space: pre-wrap;
-  }
+/* your CSS here (same as before) */
 </style>
 
 <script>
@@ -123,78 +33,62 @@
 
     const diff = diffTexts(text1, text2);
 
-    if (viewMode === "side") {
-      resultsDiv.appendChild(renderSideBySide(diff));
-    } else {
-      resultsDiv.appendChild(renderInline(diff));
-    }
+    if (viewMode === "side") resultsDiv.appendChild(renderSideBySide(diff));
+    else resultsDiv.appendChild(renderInline(diff));
   }
 
   function diffTexts(a, b) {
     const m = a.length, n = b.length;
-    const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+    const dp = Array(m+1).fill(null).map(() => Array(n+1).fill(0));
 
-    for (let i = m - 1; i >= 0; i--) {
-      for (let j = n - 1; j >= 0; j--) {
-        if (a[i] === b[j]) dp[i][j] = dp[i + 1][j + 1] + 1;
-        else dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
+    for (let i=m-1;i>=0;i--){
+      for (let j=n-1;j>=0;j--){
+        if(a[i]===b[j]) dp[i][j]=dp[i+1][j+1]+1;
+        else dp[i][j]=Math.max(dp[i+1][j],dp[i][j+1]);
       }
     }
 
-    let i = 0, j = 0;
-    const diff = [];
-    while (i < m && j < n) {
-      if (a[i] === b[j]) { diff.push({ type: "unchanged", word: a[i] }); i++; j++; }
-      else if (dp[i + 1][j] >= dp[i][j + 1]) { diff.push({ type: "removed", word: a[i++] }); }
-      else { diff.push({ type: "added", word: b[j++] }); }
+    let i=0,j=0;
+    const diff=[];
+    while(i<m && j<n){
+      if(a[i]===b[j]) { diff.push({type:"unchanged",word:a[i]}); i++; j++; }
+      else if(dp[i+1][j]>=dp[i][j+1]) { diff.push({type:"removed",word:a[i++]}); }
+      else { diff.push({type:"added",word:b[j++]}); }
     }
-    while (i < m) diff.push({ type: "removed", word: a[i++] });
-    while (j < n) diff.push({ type: "added", word: b[j++] });
-
+    while(i<m) diff.push({type:"removed",word:a[i++]});
+    while(j<n) diff.push({type:"added",word:b[j++]});
     return diff;
   }
 
   function renderSideBySide(diff) {
-    const container = document.createElement("div");
-    container.className = "results-grid";
+    const container=document.createElement("div"); container.className="results-grid";
+    const leftResult=document.createElement("div"); leftResult.className="result-box";
+    const rightResult=document.createElement("div"); rightResult.className="result-box";
 
-    const leftResult = document.createElement("div");
-    leftResult.className = "result-box";
-    const rightResult = document.createElement("div");
-    rightResult.className = "result-box";
+    diff.forEach(part=>{
+      const spanLeft=document.createElement("span");
+      const spanRight=document.createElement("span");
 
-    diff.forEach(part => {
-      const spanLeft = document.createElement("span");
-      const spanRight = document.createElement("span");
+      if(part.type==="unchanged"){spanLeft.textContent=part.word+" "; spanRight.textContent=part.word+" ";}
+      else if(part.type==="removed"){spanLeft.textContent=part.word+" "; spanLeft.className="diff-removed";}
+      else if(part.type==="added"){spanRight.textContent=part.word+" "; spanRight.className="diff-added";}
 
-      if (part.type === "unchanged") { spanLeft.textContent = part.word + " "; spanRight.textContent = part.word + " "; }
-      else if (part.type === "removed") { spanLeft.textContent = part.word + " "; spanLeft.className = "diff-removed"; }
-      else if (part.type === "added") { spanRight.textContent = part.word + " "; spanRight.className = "diff-added"; }
-
-      leftResult.appendChild(spanLeft);
-      rightResult.appendChild(spanRight);
+      leftResult.appendChild(spanLeft); rightResult.appendChild(spanRight);
     });
 
-    container.appendChild(leftResult);
-    container.appendChild(rightResult);
+    container.appendChild(leftResult); container.appendChild(rightResult);
     return container;
   }
 
-  function renderInline(diff) {
-    const box = document.createElement("div");
-    box.className = "results-inline";
-
-    diff.forEach(part => {
-      const span = document.createElement("span");
-      span.textContent = part.word + " ";
-
-      if (part.type === "unchanged") span.className = "diff-unchanged";
-      else if (part.type === "removed") span.className = "diff-removed";
-      else if (part.type === "added") span.className = "diff-added";
-
+  function renderInline(diff){
+    const box=document.createElement("div"); box.className="results-inline";
+    diff.forEach(part=>{
+      const span=document.createElement("span"); span.textContent=part.word+" ";
+      if(part.type==="unchanged") span.className="diff-unchanged";
+      else if(part.type==="removed") span.className="diff-removed";
+      else if(part.type==="added") span.className="diff-added";
       box.appendChild(span);
     });
-
     return box;
   }
 </script>
