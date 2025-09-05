@@ -2,7 +2,7 @@
 title: "Compare Text Online - Free Text Diff Tool"
 description: "Compare text online for free. Side-by-side text comparison tool to find differences."
 keywords: "text compate, compare text online, document comparison, text difference checker, side by side text comparison"
-date: 2025-09-05
+date: 2025-09-04
 draft: false
 layout: "compare-text-online"
 menu:
