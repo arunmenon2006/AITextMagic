@@ -36,6 +36,29 @@ pagination.pagerSize  = 5
   name = "About"
   url = "/about/"
   weight = 20
+  
+[[menus.main]]
+  name = "Tools"
+  url = "#"
+  weight = 25
+
+[[menus.main]]
+  name = "AI Text Tools"
+  url = "/ai-text-tools/"
+  parent = "Tools"
+  weight = 26
+
+[[menus.main]]
+  name = "JSON Formatter"
+  url = "/json-formatter/"
+  parent = "Tools"
+  weight = 27
+
+[[menus.main]]
+  name = "Text Compare"
+  url = "/compare-text-online/"
+  parent = "Tools"
+  weight = 28
 
 [[menus.main]]
   name = "Blog"
